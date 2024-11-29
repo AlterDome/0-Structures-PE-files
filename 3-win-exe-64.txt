@@ -1,0 +1,212 @@
+Структура IMAGE_NT_HEADERS64
+Struct IMAGE_NT_HEADERS64
+{
+	u32 Signature	// 0x4550 "PE"
+	
+	Struct IMAGE_FILE_HEADER 
+	{
+		u16 Machine	// 0x8664 архитектура x86-64
+		u16 NumberOfSections	// 0x03 Количество секций в файле 
+		u32 TimeDateStamp		// Дата создания файла
+		u32 PointerToSymbolTable
+		u32 NumberOfSymbols
+		u16 SizeOfOptionalHeader // Размер IMAGE_OPTIONAL_HEADER64 (Ниже)
+		u16 Characteristics	// 0x2F 
+	}
+	
+	Struct IMAGE_OPTIONAL_HEADER64
+	{
+		u16 Magic	// 0x020B Указывает что наш заголовок для PE64
+		u8 MajorLinkerVersion
+		u8 MinorLinkerVersion
+		u32 SizeOfCode
+		u32 SizeOfInitializedData
+		u32 SizeOfUninitializedData	
+		u32 AddressOfEntryPoint	// 0x1000 
+		u32 BaseOfCode	// 0x1000 
+		u64 ImageBase	// 0x400000 
+		u32 SectionAlignment	// 0x1000 (4096 байт)
+		u32 FileAlignment	// 0x200
+		u16 MajorOperatingSystemVersion	// 0x05	Windows XP
+		u16 MinorOperatingSystemVersion	// 0x02	Windows XP
+		u16 MajorImageVersion
+		u16 MinorImageVersion
+		u16 MajorSubsystemVersion	// 0x05	Windows XP
+		u16 MinorSubsystemVersion	// 0x02	Windows XP
+		u32 Win32VersionValue
+		u32 SizeOfImage	// 0x4000
+		u32 SizeOfHeaders // 0x200 (512 байт)
+		u32 CheckSum
+		u16 Subsystem	// 0x02 (GUI) или 0x03 (Console)
+		u16 DllCharacteristics
+		u64 SizeOfStackReserve	// 0x100000
+		u64 SizeOfStackCommit	// 0x1000
+		u64 SizeOfHeapReserve	// 0x100000
+		u64 SizeOfHeapCommit	// 0x1000
+		u32 LoaderFlags
+		u32 NumberOfRvaAndSizes // 0x16 
+		
+		Struct IMAGE_DATA_DIRECTORY [16] 
+		{
+			u32 VirtualAddress
+			u32 Size
+		}
+	}
+}
+
+
+**********************************************************
+
+(3) RAW NT-Header (Offset 0x00000080)
+50 45 00 00 64 86 03 00  F4 70 E8 5E 00 00 00 00
+00 00 00 00 F0 00 2F 00  0B 02 00 00 3D 00 00 00
+13 00 00 00 00 00 00 00  00 10 00 00 00 10 00 00
+00 00 40 00 00 00 00 00  00 10 00 00 00 02 00 00
+05 00 02 00 00 00 00 00  05 00 02 00 00 00 00 00
+00 40 00 00 00 02 00 00  00 00 00 00 02 00 00 00
+00 00 10 00 00 00 00 00  00 10 00 00 00 00 00 00
+00 00 10 00 00 00 00 00  00 10 00 00 00 00 00 00
+00 00 00 00 10 00 00 00  00 00 00 00 00 00 00 00
+00 30 00 00 B8 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+
+
+**********************************************************
+
+Структура IMAGE_SECTION_HEADER
+Struct IMAGE_SECTION_HEADER
+{
+	i8[8] Name
+	u32 VirtualSize
+	u32 VirtualAddress
+	u32 SizeOfRawData
+	u32 PointerToRawData
+	u32 PointerToRelocations
+	u32 PointerToLinenumbers
+	u16 NumberOfRelocations
+	u16 NumberOfLinenumbers
+	u32 Characteristics
+}
+
+
+**********************************************************
+
+(4) RAW Sections (Offset 0x00000188)
+                         2E 74 65 78 74 00 00 00
+3D 00 00 00 00 10 00 00  00 02 00 00 00 02 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 20 00 00 60
+2E 72 64 61 74 61 00 00  13 00 00 00 00 20 00 00
+00 02 00 00 00 04 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 40 00 00 40  2E 69 64 61 74 61 00 00
+B8 00 00 00 00 30 00 00  00 02 00 00 00 06 00 00
+00 00 00 00 00 00 00 00  00 00 00 00 40 00 00 40
+
+
+**********************************************************
+
+(5) RAW .text section (Offset 0x00000200-0x00000400)
+55 48 89 E5 48 83 EC 20  48 C7 C1 00 00 00 00 48
+C7 C2 00 20 40 00 49 C7  C0 0D 20 40 00 49 C7 C1
+40 00 00 00 FF 15 3E 20  00 00 48 C7 C1 00 00 00
+00 FF 15 61 20 00 00 48  83 C4 20 5D C3 00 00 00
+........
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+
+
+**********************************************************
+
+
+.rdata
+0400	"Hello World!\0"
+040D	"MyApp\0"
+
+
+(6) RAW .rdata section (Offset 0x00000400-0x00000600)
+48 65 6C 6C 6F 20 57 6F  72 6C 64 21 00 4D 79 41
+70 70 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+........
+00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+
+
+**********************************************************
+
+Структура IMAGE_IMPORT_DESCRIPTOR
+Struct IMAGE_IMPORT_DESCRIPTOR
+{
+	u32 OriginalFirstThunk (INT)
+	u32 TimeDateStamp
+	u32 ForwarderChain
+	u32 Name
+	u32 FirstThunk (IAT)
+}
+
+
+**********************************************************
+
+Для начала нам нужно добавить 2 импортируемых библиотеки. Напомним:
+
+func MessageBoxA(u32 handle, PChar text, PChar caption, u32 type) i32 ['user32.dll']
+func ExitProcess(u32 code) ['kernel32.dll']
+
+
+**********************************************************
+(7) RAW IMAGE_IMPORT_DESCRIPTOR (Offset 0x00000600)
+58 30 00 00 00 00 00 00  00 00 00 00 3C 30 00 00
+68 30 00 00 88 30 00 00  00 00 00 00 00 00 00 00
+48 30 00 00 98 30 00 00  00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 00 00
+
+
+**********************************************************
+
+Имена библиотек
+063С	"user32.dll\0"
+0648	"kernel32.dll\0"
+
+
+(8) RAW имена библиотек (Offset 0x0000063С)
+                                     75 73 65 72
+33 32 2E 64 6C 6C 00 00  6B 65 72 6E 65 6C 33 32
+2E 64 6C 6C 00 00 00 00
+
+
+**********************************************************
+
+Далее опишем библиотеку user32:
+
+(9) RAW user32.dll (Offset 0x00000658)
+                         78 30 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00  78 30 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  00 00 4D 65 73 73 61 67 
+65 42 6F 78 41 00 00 00
+
+
+**********************************************************
+
+
+
+**********************************************************
+
+
+
+**********************************************************
+
+
+
+**********************************************************
+
+
+
+**********************************************************
+
+
+
+**********************************************************
+
+
